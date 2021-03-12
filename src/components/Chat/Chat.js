@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import queryString from "query-string";
 import io from "socket.io-client";
 
 import TextContainer from "../TextContainer/TextContainer";
@@ -21,7 +20,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const { id, username, token } = useSelector((state) => state.user);
+  const { username, token } = useSelector((state) => state.user);
   const room = useSelector((state) => state.roomToJoin);
   console.log(username);
   useEffect(() => {
