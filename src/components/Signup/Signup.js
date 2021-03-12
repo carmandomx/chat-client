@@ -1,36 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { loginThunk } from "../../actions";
-
-import "./Join.css";
-
-export default function SignIn() {
+import "./Signup.css";
+const Signup = () => {
   const { register, handleSubmit } = useForm();
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const access = useSelector((state) => state.access);
-
-  useEffect(() => {
-    if (access) {
-      history.push("/chat");
-    }
-  }, [access, history]);
 
   const onSubmit = (data) => {
     console.log(data);
-    dispatch(loginThunk(data));
   };
   return (
     <div className="joinOuterContainer">
       <div className="joinInnerContainer">
-        <h1 className="heading">Join</h1>
+        <h1 className="heading">Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <input
               name="email"
               placeholder="Email"
+              className="joinInput"
+              type="text"
+              ref={register}
+            />
+          </div>
+          <div>
+            <input
+              name="username"
+              placeholder="Username"
               className="joinInput"
               type="text"
               ref={register}
@@ -48,22 +42,19 @@ export default function SignIn() {
           <div>
             <input
               name="room"
-              placeholder="Room"
-              className="joinInput mt-20"
+              placeholder="Room to join"
+              className="joinInput"
               type="text"
               ref={register}
             />
           </div>
           <button className={"button mt-20"} type="submit">
-            Sign In
+            Create
           </button>
         </form>
-        <div>
-          <Link className="mt-20" style={{ color: "#fff" }} to="/signup">
-            Create an account
-          </Link>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Signup;

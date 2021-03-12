@@ -8,42 +8,53 @@ import InfoBar from "../InfoBar/InfoBar";
 import Input from "../Input/Input";
 
 import "./Chat.css";
+import { useSelector } from "react-redux";
 
-const ENDPOINT = "https://academlo-chat.herokuapp.com/";
+const ENDPOINT = "localhost:5000";
+// const ENDPOINT = "https://academlo-chat.herokuapp.com/";
 
 let socket;
 
 const Chat = ({ location }) => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  // const [name, setName] = useState("");
+  // const [room, setRoom] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-
+  const { id, username, token } = useSelector((state) => state.user);
+  const room = useSelector((state) => state.roomToJoin);
+  console.log(username);
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
+    if (token && username) {
+      socket = io(ENDPOINT, {
+        query: {
+          token,
+        },
+      });
 
-    socket = io(ENDPOINT);
+      socket.on("error", (err) => console.log(err));
 
-    setRoom(room);
-    setName(name);
+      socket.emit("join", { name: username, room }, (error) => {
+        if (error) {
+          console.error(error);
+        }
+      });
 
-    socket.emit("join", { name, room }, (error) => {
-      if (error) {
-        console.error(error);
-      }
-    });
-  }, [location.search]);
+      socket.on("message", (message) => {
+        console.log(message);
+        setMessages((messages) => [...messages, message]);
+      });
 
-  useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages((messages) => [...messages, message]);
-    });
+      socket.on("roomData", ({ users }) => {
+        console.log(users);
+        setUsers(users);
+      });
+    }
+  }, [token, room, username]);
 
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
-    });
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -57,7 +68,7 @@ const Chat = ({ location }) => {
     <div className="grid">
       <InfoBar room={room} />
       <div className="container">
-        <Messages messages={messages} name={name} />
+        <Messages messages={messages} name={username} />
       </div>
       <Input
         message={message}
