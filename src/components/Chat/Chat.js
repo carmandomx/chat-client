@@ -9,8 +9,8 @@ import Input from "../Input/Input";
 import "./Chat.css";
 import { useSelector } from "react-redux";
 
-const ENDPOINT = "localhost:5000";
-// const ENDPOINT = "https://academlo-chat.herokuapp.com/";
+// const ENDPOINT = "localhost:5000";
+const ENDPOINT = "https://academlo-chat.herokuapp.com/";
 
 let socket;
 
