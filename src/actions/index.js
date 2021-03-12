@@ -31,7 +31,7 @@ export const loginThunk = (loginFormData) => {
     dispatch(login(room));
 
     return axios
-      .post("http://localhost:5000/api/users/login", {
+      .post("https://academlo-chat.herokuapp.com/api/users/login", {
         email,
         password,
       })
@@ -63,7 +63,7 @@ export const signupThunk = (signupFormData) => {
     dispatch(signup(room));
 
     return axios
-      .post("http://localhost:5000/api/users/login", {
+      .post("https://academlo-chat.herokuapp.com/api/users/login", {
         email,
         username,
         password,
